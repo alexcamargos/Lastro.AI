@@ -1,0 +1,61 @@
+# Arquivos de Ambiente e Dependências
+.env
+.venv
+env/
+venv/
+
+# Caches de gerenciadores de pacotes e pacotes instalados localmente.
+.eggs/
+.pdm.toml
+__pypackages__/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Python & Jupyter
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Caches de ferramentas de qualidade de código e testes.
+.cache/
+.coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+
+# Checkpoints do Jupyter Notebook.
+.ipynb_checkpoints/
+
+# Dados e Relatórios
+output/
+reports/
+~$*
+
+# Build e Distribuição
+build/
+dist/
+*.egg-info/
+wheels/
+sdist/
+
+# Configurações de IDEs e Editores
+.idea/ # JetBrains (PyCharm, DataGrip)
+.vscode/ # Visual Studio Code
+.spyderproject/
+.ropeproject/
+
+# Sistema Operacional
+# Windows
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
