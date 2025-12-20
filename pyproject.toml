@@ -1,0 +1,35 @@
+[project]
+name = "lastro-ai"
+version = "0.1.0"
+authors = [
+  { name="Alexsander Lopes Camargos", email="alexcamargos@gmail.com" },
+]
+description = "Lastro.AI: Seu Agente de Política Monetária. Transforma relatórios estáticos do BACEN em conhecimento dinâmico e preciso."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Text Processing :: Linguistic"
+]
+keywords = [
+    "ai",
+    "rag",
+    "bacen",
+    "economics",
+    "nlp",
+    "finance",
+    "llm",
+    "vector-search",
+    "policy-analysis"
+]
