@@ -59,3 +59,13 @@ $RECYCLE.BIN/
 .directory
 .Trash-*
 .nfs*
+
+# Projetos Específicos
+data/*
+!data/.gitkeep
+!data/raw/
+data/raw/*
+!data/raw/.gitkeep
+!data/vector_store/
+data/vector_store/*
+!data/vector_store/.gitkeep
