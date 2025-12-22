@@ -7,6 +7,16 @@ authors = [
 description = "Lastro.AI: Seu Agente de Política Monetária. Transforma relatórios estáticos do BACEN em conhecimento dinâmico e preciso."
 readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "fire",
+    "requests",
+    "pdfplumber",
+    "faiss-cpu",
+    "sentence-transformers",
+    "loguru>=0.7.3",
+    "langchain-text-splitters",
+    "langchain-core",
+]
 license = { text = "MIT" }
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -33,3 +43,10 @@ keywords = [
     "vector-search",
     "policy-analysis"
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = { include = ["lastro_ai"] }
