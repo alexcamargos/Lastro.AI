@@ -19,12 +19,14 @@ from typing import Callable, Dict, Optional
 
 from langchain_core.language_models import BaseChatModel
 
+from lastro_ai.agent.services.groq import create_groq_model
 from lastro_ai.agent.services.ollama import create_ollama_model
 
 
 # Mapeamento de provedores para suas funções de fábrica.
 _MODEL_FACTORIES: Dict[str, Callable[[Optional[str], float], BaseChatModel]] = {
     "ollama": create_ollama_model,
+    "groq": create_groq_model,
 }
 
 
