@@ -41,9 +41,8 @@ class LastroAgent:
         self.prompts = self._load_prompts()
 
         # Inicializa o modelo de linguagem.
-        # Aqui você pode definir dinamicamente via config ou argumento
-        # Ex: get_chat_model(provider="openai", model_name="gpt-4o")
-        self.chat_model = get_chat_model(provider="ollama")
+        # O provedor é definido na configuração global.
+        self.chat_model = get_chat_model(provider=Cfg.LLM_PROVIDER)
 
     def _load_prompts(self) -> dict:
         """Carrega as configurações de prompt do arquivo TOML."""

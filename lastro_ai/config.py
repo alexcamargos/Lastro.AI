@@ -64,6 +64,11 @@ VECTOR_STORE_DOCS_NAME: str = 'documents.pkl'
 PROMPTS_DIR = Path(__file__).parent / 'agent' / 'prompts'
 
 
+# Configuração do Provedor de LLM Ativo:
+# Exemplos: 'ollama', 'groq, 'openai', etc.
+LLM_PROVIDER: str = 'groq'
+
+
 # Configurações de SLM (Ollama)
 OLLAMA_BASE_URL: str = 'http://localhost:11434'
 OLLAMA_MODEL_NAME: str = 'deepseek-r1:8b'
