@@ -15,12 +15,11 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
-from os import getcwd
 from pathlib import Path
 
 
 # Base do projeto (cwd)
-BASE_DIR: Path = Path(getcwd())
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 
 # Diretórios de Dados
@@ -55,3 +54,12 @@ DOWNLOAD_CHUNK_SIZE: int = 8192
 # Vector Store filenames
 VECTOR_STORE_INDEX_NAME: str = 'index.faiss'
 VECTOR_STORE_DOCS_NAME: str = 'documents.pkl'
+
+
+# Diretório dos Prompts
+PROMPTS_DIR = Path(__file__).parent / 'agent' / 'prompts'
+
+
+# Configurações de SLM (Ollama)
+OLLAMA_BASE_URL: str = 'http://localhost:11434'
+OLLAMA_MODEL_NAME: str = 'deepseek-r1:8b'
