@@ -15,8 +15,12 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
+import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Base do projeto (cwd)
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
@@ -63,3 +67,8 @@ PROMPTS_DIR = Path(__file__).parent / 'agent' / 'prompts'
 # Configurações de SLM (Ollama)
 OLLAMA_BASE_URL: str = 'http://localhost:11434'
 OLLAMA_MODEL_NAME: str = 'deepseek-r1:8b'
+
+
+# Configurações de Groq
+GROQ_API_KEY: str | None = os.getenv("GROQ_API_KEY")
+GROQ_MODEL_NAME: str = 'qwen/qwen3-32b'
