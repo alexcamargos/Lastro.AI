@@ -18,6 +18,8 @@ dependencies = [
     "langchain-core",
     "langchain-community>=0.4.1",
     "langchain-ollama>=1.0.1",
+    "langchain-groq",
+    "python-dotenv",
 ]
 license = { text = "MIT" }
 classifiers = [
