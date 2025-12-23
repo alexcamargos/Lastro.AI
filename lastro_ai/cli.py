@@ -20,6 +20,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter as RCTextSpl
 from loguru import logger
 
 from lastro_ai import config as Cfg
+from lastro_ai.agent.core import LastroAgent
 from lastro_ai.core.embedding import VectorStore
 from lastro_ai.core.extracting import extract_report_text as extractor
 from lastro_ai.core.ingestion import download_report as downloader
@@ -47,6 +48,7 @@ class LastroCLI:
         process_batch(years: int = 1): Baixa e processa automaticamente relatórios dos últimos N anos.
         rebuild_database(): Apaga o índice atual e reconstrói tudo a partir dos PDFs na pasta 'raw'.
         search(question: str, k: int = 5): Realiza uma busca semântica no banco de conhecimento.
+        ask(question: str): Envia uma pergunta ao Agente Lastro.AI e exibe a resposta fundamentada.
 
     Command Examples:
         python main.py ingest <pdf_url>
@@ -56,6 +58,7 @@ class LastroCLI:
         python main.py process_batch [years]
         python main.py rebuild_database
         python main.py search <question> [k]
+        python main.py ask <question> [--verbose]
     """
 
     def __init__(self) -> None:
@@ -121,6 +124,11 @@ class LastroCLI:
         # Extração de texto do PDF do relatório.
         logger.info(f'Extraindo texto de {pdf_path.name}...')
         raw_documents = extractor(pdf_path)
+
+        # Sanitização: Remove caracteres de substituição () gerados por falhas de encoding no PDF.
+        for doc in raw_documents:
+            if doc.page_content:
+                doc.page_content = doc.page_content.replace('\ufffd', '')
 
         # Chunking do texto extraído, para facilitar a vetorização.
         logger.info('Segmentando texto (Chunking)...')
@@ -295,3 +303,32 @@ class LastroCLI:
             else:
                 print(f'# {index}: {text}')
             print('-' * 40)
+
+    def ask(self, question: str, verbose: bool = False) -> None:
+        """Envia uma pergunta ao Agente Lastro.AI e exibe a resposta.
+
+        Utiliza o modelo de linguagem configurado (SLM/LLM) e a base de conhecimento
+        vetorial para gerar uma resposta fundamentada nos relatórios do BACEN.
+
+        Args:
+            question (str): A pergunta a ser respondida pelo agente.
+            verbose (bool): Se True, exibe detalhes do prompt enviado ao modelo.
+        """
+
+        logger.info('Iniciando interação com Lastro.AI para a pergunta:')
+        logger.info(question)
+
+        try:
+            agent = LastroAgent()
+            response = agent.run(question, verbose=verbose)
+
+            print("\n" + "=" * 60)
+            print("Lastro.AI Responde:\n")
+            print(response)
+            print("=" * 60 + "\n")
+
+        # Broad-except é usado intencionalmente para capturar qualquer erro
+        # durante a interação do agente, garantindo que o usuário receba
+        # uma mensagem de erro amigável em vez de uma falha abrupta.
+        except Exception:  # pylint: disable=broad-except
+            logger.exception("Ocorreu um erro inesperado ao processar a pergunta.")
