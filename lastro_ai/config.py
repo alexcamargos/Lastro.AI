@@ -77,3 +77,7 @@ OLLAMA_MODEL_NAME: str = 'deepseek-r1:8b'
 # Configurações de Groq
 GROQ_API_KEY: str | None = os.getenv("GROQ_API_KEY")
 GROQ_MODEL_NAME: str = 'qwen/qwen3-32b'
+
+
+# Caminho para a aplicação Web (Chainlit)
+WEB_APP_PATH: Path = BASE_DIR / 'lastro_ai' / 'web' / 'app.py'
