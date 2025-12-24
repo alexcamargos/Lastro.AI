@@ -59,6 +59,7 @@ class LastroCLI:
         python main.py process_report <pdf_url> [chunk_size]
         python main.py process_batch [years]
         python main.py rebuild_database
+        python main.py inspect [limit]
         python main.py search <question> [k]
         python main.py ask <question> [--verbose]
         python main.py web [--watch]
@@ -280,6 +281,31 @@ class LastroCLI:
                 logger.exception(f'Erro ao processar {pdf_path.name}')
 
         logger.info('Reconstrução concluída com sucesso!')
+
+    def inspect(self, limit: int = 3) -> None:
+        """Exibe uma amostra dos documentos vetorizados para auditoria.
+
+        Permite visualizar como o texto foi segmentado (chunking) e armazenado,
+        incluindo metadados e formatação de tabelas. Útil para verificar se
+        o chunk_size e chunk_overlap estão adequados.
+
+        Args:
+            limit (int): Número de chunks a serem exibidos. Padrão é 3.
+        """
+        vector_store = self._get_vector_store()
+        docs = vector_store.documents
+
+        if not docs:
+            logger.warning("O banco vetorial está vazio. Execute 'ingest' ou 'process_batch' primeiro.")
+            return
+
+        print(f"\n=== Inspeção do Vector Store ({len(docs)} chunks totais) ===")
+
+        for i, doc in enumerate(docs[:limit]):
+            print(f"\n[Chunk #{i}] Metadata: {doc.metadata}")
+            print("-" * 60)
+            print(doc.page_content)
+            print("-" * 60)
 
     def search(self, question: str, k: int = 5) -> None:
         """Realiza uma busca semântica no banco de conhecimento vetorial.
