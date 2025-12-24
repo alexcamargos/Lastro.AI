@@ -126,7 +126,6 @@ class LastroCLI:
         """
 
         # Extração de texto do PDF do relatório.
-        logger.info(f'Extraindo texto de {pdf_path.name}...')
         raw_documents = extractor(pdf_path)
 
         # Sanitização: Remove caracteres de substituição () gerados por falhas de encoding no PDF.
