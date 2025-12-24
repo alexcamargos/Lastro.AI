@@ -15,6 +15,8 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
+import subprocess
+import sys
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter as RCTextSplitter
 from loguru import logger
@@ -59,6 +61,7 @@ class LastroCLI:
         python main.py rebuild_database
         python main.py search <question> [k]
         python main.py ask <question> [--verbose]
+        python main.py web [--watch]
     """
 
     def __init__(self) -> None:
@@ -332,3 +335,27 @@ class LastroCLI:
         # uma mensagem de erro amigável em vez de uma falha abrupta.
         except Exception:  # pylint: disable=broad-except
             logger.exception("Ocorreu um erro inesperado ao processar a pergunta.")
+
+    def web(self, watch: bool = False) -> None:
+        """Inicia a interface web do Lastro.AI.
+
+        Inicia o servidor Chainlit, tornando o agente acessível via navegador.
+
+        Args:
+            watch (bool): Se True, ativa o modo de recarregamento automático (desenvolvimento).
+        """
+
+        logger.info(f'Iniciando interface web a partir de: {Cfg.WEB_APP_PATH}')
+
+        cmd = [sys.executable, '-m', 'chainlit', 'run', str(Cfg.WEB_APP_PATH)]
+
+        if watch:
+            cmd.append("-w")
+
+        try:
+            # Executa o módulo chainlit como script (-m chainlit run ...)
+            subprocess.run(cmd, check=True)
+        except KeyboardInterrupt:
+            logger.info('Servidor web interrompido pelo usuário.')
+        except subprocess.CalledProcessError as error:
+            logger.error(f'O servidor web foi encerrado com erro (código {error.returncode}).')
