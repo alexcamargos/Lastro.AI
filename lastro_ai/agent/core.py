@@ -15,6 +15,8 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
+from typing import Optional
+
 import tomllib
 
 from langchain_core.output_parsers import StrOutputParser
@@ -37,12 +39,15 @@ class LastroAgent:
     3. Geração de resposta via LLM.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, provider: Optional[str] = None) -> None:
         self.prompts = self._load_prompts()
 
         # Inicializa o modelo de linguagem.
-        # O provedor é definido na configuração global.
-        self.chat_model = get_chat_model(provider=Cfg.LLM_PROVIDER)
+        # O provedor é definido na configuração global, mas pode ser sobrescrito.
+        if provider is None:
+            provider = Cfg.LLM_PROVIDER
+
+        self.chat_model = get_chat_model(provider=provider)
 
     def _load_prompts(self) -> dict:
         """Carrega as configurações de prompt do arquivo TOML."""
