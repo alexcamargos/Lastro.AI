@@ -20,6 +20,7 @@ dependencies = [
     "langchain-ollama>=1.0.1",
     "langchain-groq",
     "python-dotenv",
+    "chainlit",
 ]
 license = { text = "MIT" }
 classifiers = [
