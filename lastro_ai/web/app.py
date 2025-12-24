@@ -13,6 +13,8 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
+import re
+
 import chainlit as cl
 
 from lastro_ai import config as Cfg
@@ -67,9 +69,25 @@ async def on_message(message: cl.Message) -> None:
         message (cl.Message): Mensagem enviada pelo usuário.
     """
 
+    # Recupera o agente da sessão do usuário.
     agent = cl.user_session.get("agent")
-
     # Executa o agente. Usamos make_async para envolver a chamada síncrona do agente.
     response = await cl.make_async(agent.run)(message.content, verbose=True)
 
-    await cl.Message(content=response).send()
+    # Verifica se há blocos de pensamento (<think>...</think>) na resposta.
+    # Se houver, formata como um bloco colapsável (details) do Markdown.
+    thought_match = re.search(r'<think>(.*?)</think>', response, re.DOTALL)
+    if thought_match:
+        thought_content = thought_match.group(1).strip()
+
+        # Remove a tag original da resposta para evitar duplicação.
+        final_answer = re.sub(r'<think>.*?</think>', '', response, flags=re.DOTALL).strip()
+
+        # Usa um Step do Chainlit para mostrar o pensamento de forma nativa e segregada.
+        async with cl.Step(name='Mostrar Raciocínio') as step:
+            step.output = thought_content
+
+        await cl.Message(content=final_answer).send()
+    else:
+        # Se não houver pensamento, envia a resposta original.
+        await cl.Message(content=response).send()
