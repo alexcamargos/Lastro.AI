@@ -15,11 +15,11 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
+import tomllib
 from typing import Optional
 
-import tomllib
-
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompt_values import PromptValue
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from loguru import logger
@@ -57,7 +57,7 @@ class LastroAgent:
         with open(prompts_path, "rb") as file:
             return tomllib.load(file)
 
-    def _inspect_prompt(self, prompt_value, verbose: bool) -> str:
+    def _inspect_prompt(self, prompt_value: PromptValue, verbose: bool) -> PromptValue:
         """Helper para exibir o prompt no terminal se o modo verbose estiver ativo.
 
         Args:
