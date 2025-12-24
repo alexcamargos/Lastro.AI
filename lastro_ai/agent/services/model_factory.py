@@ -25,8 +25,8 @@ from lastro_ai.agent.services.ollama import create_ollama_model
 
 # Mapeamento de provedores para suas funções de fábrica.
 _MODEL_FACTORIES: Dict[str, Callable[[Optional[str], float], BaseChatModel]] = {
-    "ollama": create_ollama_model,
-    "groq": create_groq_model,
+    'ollama': create_ollama_model,
+    'groq': create_groq_model,
 }
 
 
@@ -49,6 +49,6 @@ def get_chat_model(provider: str = "ollama",
     provider = provider.lower()
 
     if provider not in _MODEL_FACTORIES:
-        raise ValueError(f"Provedor de LLM não suportado: {provider}")
+        raise ValueError(f'Provedor de LLM não suportado: {provider}')
 
     return _MODEL_FACTORIES[provider](model_name, temperature)

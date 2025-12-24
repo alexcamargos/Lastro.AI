@@ -54,7 +54,7 @@ class LastroAgent:
 
         prompts_path = Cfg.PROMPTS_DIR / "slm.toml"
 
-        with open(prompts_path, "rb") as file:
+        with open(prompts_path, 'rb') as file:
             return tomllib.load(file)
 
     def _inspect_prompt(self, prompt_value: PromptValue, verbose: bool) -> PromptValue:
@@ -90,13 +90,13 @@ class LastroAgent:
         """
 
         # Preparar o prompt
-        system_msg = self.prompts["agent"]["system_message"]
-        rag_template = self.prompts["rag"]["qa_template"]
+        system_msg = self.prompts['agent']['system_message']
+        rag_template = self.prompts['rag']['qa_template']
 
         prompt = ChatPromptTemplate.from_messages(
             [
-                ("system", system_msg),
-                ("human", rag_template),
+                ('system', system_msg),
+                ('human', rag_template),
             ]
         )
 
@@ -105,8 +105,8 @@ class LastroAgent:
         # RunnableLambda: Envolve nossa função de retrieval para ser usada na chain.
         chain = (
             {
-                "context": RunnableLambda(retrieve_context),
-                "question": RunnablePassthrough()
+                'context': RunnableLambda(retrieve_context),
+                'question': RunnablePassthrough()
             }
             | prompt
             | RunnableLambda(lambda prompt: self._inspect_prompt(prompt, verbose))

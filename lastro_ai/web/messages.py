@@ -14,7 +14,7 @@
 # ------------------------------------------------------------------------------
 
 WELCOME_MESSAGE: str = (
-    "Olá! Sou o **Lastro.AI**, seu assistente de política monetária.\n\n"
-    "Posso analisar relatórios do BACEN, explicar tendências de inflação "
-    "e detalhar as projeções econômicas. Como posso ajudar hoje?"
+    'Olá! Sou o **Lastro.AI**, seu assistente de política monetária.\n\n'
+    'Posso analisar relatórios do BACEN, explicar tendências de inflação '
+    'e detalhar as projeções econômicas. Como posso ajudar hoje?'
 )

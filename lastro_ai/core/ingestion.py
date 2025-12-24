@@ -50,18 +50,18 @@ def download_report(url: str,
         requests.exceptions.RequestException: Caso ocorra erro na conexão ou download.
     """
 
-    logger.info(f"Baixando relatório de: {url}...")
+    logger.info(f'Baixando relatório de: {url}...')
 
     with requests.get(url, timeout=timeout, stream=True) as response:
         # Levanta um erro para códigos de status HTTP ruins.
         response.raise_for_status()
 
-        with open(save_path, "wb") as file:
+        with open(save_path, 'wb') as file:
             for chunk in response.iter_content(chunk_size=chunk_size):
                 file.write(chunk)
 
     file_size = save_path.stat().st_size / (1024 * 1024)
-    logger.info(f"Relatório salvo em: {save_path} ({file_size:.2f} MB)")
+    logger.info(f'Relatório salvo em: {save_path} ({file_size:.2f} MB)')
 
     return save_path
 
@@ -111,14 +111,14 @@ def download_reports_batch(years: int, save_dir: Path) -> list[Path]:
                 downloaded_files.append(save_path)
             except requests.exceptions.HTTPError as error:
                 if error.response.status_code == 404:
-                    logger.warning(f"Relatório não encontrado (ou não publicado): {url}")
+                    logger.warning(f'Relatório não encontrado (ou não publicado): {url}')
                 else:
-                    logger.error(f"Erro ao baixar {url}: {error}")
+                    logger.error(f'Erro ao baixar {url}: {error}')
                 errors += 1
             except requests.exceptions.RequestException as error:
-                logger.error(f"Erro inesperado em {url}: {error}")
+                logger.error(f'Erro inesperado em {url}: {error}')
                 errors += 1
 
-    logger.info(f"Download concluído: {downloaded_count} arquivos baixados com {errors} erros.")
+    logger.info(f'Download concluído: {downloaded_count} arquivos baixados com {errors} erros.')
 
     return downloaded_files

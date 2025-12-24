@@ -298,13 +298,13 @@ class LastroCLI:
             logger.warning("O banco vetorial está vazio. Execute 'ingest' ou 'process_batch' primeiro.")
             return
 
-        print(f"\n=== Inspeção do Vector Store ({len(docs)} chunks totais) ===")
+        print(f'\n=== Inspeção do Vector Store ({len(docs)} chunks totais) ===')
 
         for i, doc in enumerate(docs[:limit]):
-            print(f"\n[Chunk #{i}] Metadata: {doc.metadata}")
-            print("-" * 60)
+            print(f'\n[Chunk #{i}] Metadata: {doc.metadata}')
+            print('-' * 60)
             print(doc.page_content)
-            print("-" * 60)
+            print('-' * 60)
 
     def search(self, question: str, k: int = 5) -> None:
         """Realiza uma busca semântica no banco de conhecimento vetorial.
@@ -350,16 +350,16 @@ class LastroCLI:
             agent = LastroAgent()
             response = agent.run(question, verbose=verbose)
 
-            print("\n" + "=" * 60)
-            print("Lastro.AI Responde:\n")
+            print('\n' + '=' * 60)
+            print('Lastro.AI Responde:\n')
             print(response)
-            print("=" * 60 + "\n")
+            print('=' * 60 + '\n')
 
         # Broad-except é usado intencionalmente para capturar qualquer erro
         # durante a interação do agente, garantindo que o usuário receba
         # uma mensagem de erro amigável em vez de uma falha abrupta.
         except Exception:  # pylint: disable=broad-except
-            logger.exception("Ocorreu um erro inesperado ao processar a pergunta.")
+            logger.exception('Ocorreu um erro inesperado ao processar a pergunta.')
 
     def web(self, watch: bool = False) -> None:
         """Inicia a interface web do Lastro.AI.

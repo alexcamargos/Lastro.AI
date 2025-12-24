@@ -30,18 +30,18 @@ async def on_chat_start() -> None:
     settings = await cl.ChatSettings(
         [
             cl.input_widget.Select(
-                id="provider",
-                label="Provedor de IA",
-                values=["groq", "ollama"],
-                initial_index=0 if Cfg.LLM_PROVIDER == "groq" else 1,
+                id='provider',
+                label='Provedor de IA',
+                values=['groq', 'ollama'],
+                initial_index=0 if Cfg.LLM_PROVIDER == 'groq' else 1,
             )
         ]
     ).send()
 
     # Instancia o agente e armazena na sessão do usuário.
     # Isso garante que cada aba/usuário tenha seu próprio agente isolado.
-    agent = LastroAgent(provider=settings["provider"])
-    cl.user_session.set("agent", agent)
+    agent = LastroAgent(provider=settings['provider'])
+    cl.user_session.set('agent', agent)
 
     await cl.Message(content=WELCOME_MESSAGE).send()
 
@@ -54,11 +54,11 @@ async def setup_agent(settings: dict) -> None:
         settings (dict): Configurações atualizadas do usuário.
     """
 
-    provider = settings["provider"]
+    provider = settings['provider']
 
     # Recria o agente com o novo provedor selecionado.
     agent = LastroAgent(provider=provider)
-    cl.user_session.set("agent", agent)
+    cl.user_session.set('agent', agent)
 
 
 @cl.on_message

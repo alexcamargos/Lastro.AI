@@ -41,4 +41,4 @@ def create_ollama_model(model_name: Optional[str], temperature: float = 0) -> Ba
     return ChatOllama(base_url=Cfg.OLLAMA_BASE_URL,
                       model=model_name,
                       temperature=temperature,
-                      keep_alive="5m")
+                      keep_alive='5m')
