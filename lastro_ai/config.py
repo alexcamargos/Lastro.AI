@@ -60,8 +60,10 @@ VECTOR_STORE_INDEX_NAME: str = 'index.faiss'
 VECTOR_STORE_DOCS_NAME: str = 'documents.pkl'
 
 
-# Diretório dos Prompts
-PROMPTS_DIR = Path(__file__).parent / 'agent' / 'prompts'
+# Diretório dos Prompts (Agora centralizado)
+PROMPTS_DIR = BASE_DIR / 'lastro_ai' / 'prompts'
+# Perfil de Prompt Ativo: 'slm' (instruções rígidas) ou 'std' (padrão)
+PROMPT_PROFILE: str = 'slm'
 
 
 # Configuração do Provedor de LLM Ativo:

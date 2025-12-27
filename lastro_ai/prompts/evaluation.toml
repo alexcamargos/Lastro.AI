@@ -1,0 +1,37 @@
+# Prompts para Avaliação de Qualidade e Testes
+
+[extraction]
+judge_template = """
+Você é um avaliador especialista em processamento de documentos (OCR/PDF Parsing).
+Analise o texto extraído abaixo de uma página de um documento oficial e dê uma nota de 0 a 10.
+
+Critérios de Avaliação:
+1. **Coerência Textual**: O texto faz sentido ou há quebras de linha/palavras unidas incorretamente?
+2. **Formatação de Tabelas**: Se houver tabelas, elas estão em Markdown estruturado ou "achatadas"?
+3. **Limpeza**: O texto contém cabeçalhos/rodapés repetitivos ("Banco Central do Brasil", "Pág 10")? (Menos é melhor)
+
+<texto_extraido>
+{text}
+</texto_extraido>
+
+Responda APENAS no seguinte formato JSON:
+{{
+    "score": <nota_0_10>,
+    "reasoning": "<breve explicação dos pontos positivos e negativos>",
+    "has_table": <true/false>,
+    "has_noise": <true/false>
+}}
+"""
+
+[retrieval]
+synthetic_qa_template = """
+Você é um gerador de dados para testes de RAG.
+Dado o texto abaixo, gere UMA pergunta específica que só possa ser respondida corretamente com este texto.
+A pergunta deve ser clara e não deve mencionar "de acordo com o texto".
+
+<texto>
+{text}
+</texto>
+
+Pergunta:
+"""
