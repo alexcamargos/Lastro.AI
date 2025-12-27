@@ -18,12 +18,14 @@
 import subprocess
 import sys
 from pathlib import Path
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter as RCTextSplitter
 from loguru import logger
 
 from lastro_ai import config as Cfg
 from lastro_ai.agent.core import LastroAgent
 from lastro_ai.core.embedding import VectorStore
+from lastro_ai.core.evaluator import evaluate_extraction_quality
 from lastro_ai.core.extracting import extract_report_text as extractor
 from lastro_ai.core.ingestion import download_report as downloader
 from lastro_ai.core.ingestion import download_reports_batch as batch_downloader
@@ -62,6 +64,7 @@ class LastroCLI:
         python main.py inspect [limit]
         python main.py search <question> [k]
         python main.py ask <question> [--verbose]
+        python main.py evaluate [num_files]
         python main.py web [--watch]
     """
 
@@ -360,6 +363,18 @@ class LastroCLI:
         # uma mensagem de erro amigável em vez de uma falha abrupta.
         except Exception:  # pylint: disable=broad-except
             logger.exception('Ocorreu um erro inesperado ao processar a pergunta.')
+
+    def evaluate(self, num_files: int = 3) -> None:
+        """Avalia a qualidade da extração de texto usando LLM-as-a-Judge.
+
+        Seleciona PDFs aleatórios, extrai texto e solicita ao LLM uma avaliação
+        de coerência, formatação de tabelas e presença de ruído.
+
+        Args:
+            num_files (int): Número de arquivos a testar. Padrão é 3.
+        """
+
+        evaluate_extraction_quality(num_files)
 
     def web(self, watch: bool = False) -> None:
         """Inicia a interface web do Lastro.AI.
