@@ -1,35 +1,41 @@
 # Bem-vindo ao Lastro.AI
 
-**Lastro.AI** é o seu Agente de Política Monetária Inteligente.
+**Análise Inteligente de Política Monetária**
 
-Esta aplicação utiliza Inteligência Artificial Generativa e técnicas de RAG (*Retrieval-Augmented Generation*) para transformar relatórios estáticos do Banco Central do Brasil em conhecimento dinâmico, permitindo análises precisas sobre inflação, juros e cenários econômicos.
+O **Lastro.AI** não é apenas um chatbot; é um analista econômico sintético. Ele combina a capacidade de raciocínio de grandes modelos de linguagem (LLMs) com a precisão dos documentos oficiais do Banco Central do Brasil.
 
----
 
-## Engenharia de Prompt
+## Como o Sistema Funciona?
 
-O agente opera com uma **persona especializada** em análise econômica, configurada para garantir a máxima fidelidade aos dados oficiais.
+Diferente de IAs genéricas (como o ChatGPT padrão) que podem "alucinar" ou usar dados desatualizados, o Lastro.AI opera em um ciclo rigoroso de **RAG (Retrieval-Augmented Generation)**:
 
-### Diretrizes do Sistema:
-1.  **Contexto Fechado:** As respostas baseiam-se **exclusivamente** nos trechos recuperados dos relatórios (RAG).
-2.  **Precisão:** Citação exata de dados numéricos, datas e projeções.
-3.  **Tom:** Técnico, analítico e direto, evitando opiniões ou conhecimento externo não verificado.
+1.  **Busca Semântica & Re-Ranking**: Quando você faz uma pergunta, o sistema varre milhares de páginas dos Relatórios de Inflação e Atas do COPOM. Ele usa um modelo Cross-Encoder avançado para selecionar os 5 trechos mais relevantes, mesmo que não contenham as palavras exatas da sua pergunta.
+2.  **Análise Fundamentada**: O Agente recebe *apenas* esses trechos oficiais como sua única fonte de verdade.
+3.  **Resposta Citada**: A resposta gerada cita explicitamente quais documentos e páginas fundamentaram a conclusão (ex: *"Conforme Relatório de Inflação 03/2024, Trecho 2"*).
 
----
 
-## Fonte de Dados
+## O que você pode perguntar?
 
-A base de conhecimento é alimentada diretamente pelos documentos oficiais do **Banco Central do Brasil (BACEN)**:
+Tente perguntas complexas que exigiriam leitura de vários documentos:
 
-O **Relatório de Política Monetária (RPM)** apresenta as diretrizes das políticas adotadas pelo Copom e sua avaliação da evolução recente e das perspectivas da economia, especialmente as projeções de inflação. Conjuntamente com o Comunicado e a Ata do Copom, o RPM é um dos principais documentos da política monetária. Essas publicações promovem a transparência das decisões do Comitê, fazendo parte do processo de prestação de contas à sociedade e contribuindo para a eficácia da política monetária. Entre 1999 e 2024, este documento era denominado **Relatório de Inflação (RI)**.
+- *"Qual a diferença na projeção de inflação entre o cenário de referência e o alternativo?"*
+- *"Quais foram os principais riscos fiscais citados na última Ata do COPOM?"*
+- *"O que o relatórios diz sobre o impacto do cenário externo na taxa de câmbio?"*
+- *"Compare a visão sobre o hiato do produto em 2024 versus 2025."*
 
-Acesse os relatórios originais em: https://www.bcb.gov.br/publicacoes/rpm
 
-Os documentos são processados, segmentados e indexados vetorialmente para permitir buscas semânticas de alta relevância.
+## Fonte de Dados Oficial
 
----
+A base de conhecimento é composta exclusivamente por documentos públicos do **Banco Central do Brasil**:
+- **Relatório de Inflação (RI)**
+- **Relatório de Política Monetária (RPM)**
 
-## Sobre o Projeto
 
-- **Desenvolvedor:** Alexsander Lopes Camargos
-- **Licença:** MIT
+Acesse os originais: [bcb.gov.br/publicacoes/rpm](https://www.bcb.gov.br/publicacoes/rpm)
+
+
+## Sobre
+
+Este projeto é um portfólio de Engenharia de IA focado em **precisão e transparência**.
+*   **Desenvolvedor:** [Alexsander Lopes Camargos](https://github.com/alexcamargos)
+*   **Licença:** MIT
