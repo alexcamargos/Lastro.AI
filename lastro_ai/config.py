@@ -42,6 +42,9 @@ REPORT_QUARTERS: list[str] = ['03', '06', '09', '12']
 
 # Configurações de IA: Modelo de Embeddings com suporte a Português.
 EMBEDDING_MODEL_NAME: str = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
+# Modelo de Re-Ranking (Cross-Encoder) para refinar a busca.
+RERANKER_MODEL_NAME: str = 'cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+INITIAL_RETRIEVAL_K: int = 20
 
 
 # Configurações de Chunking
