@@ -25,7 +25,7 @@ from loguru import logger
 from lastro_ai import config as Cfg
 from lastro_ai.agent.core import LastroAgent
 from lastro_ai.core.embedding import VectorStore
-from lastro_ai.core.evaluator import evaluate_extraction_quality
+from lastro_ai.core.evaluator import evaluate_extraction_quality, evaluate_retrieval_performance
 from lastro_ai.core.extracting import extract_report_text as extractor
 from lastro_ai.core.ingestion import download_report as downloader
 from lastro_ai.core.ingestion import download_reports_batch as batch_downloader
@@ -65,6 +65,7 @@ class LastroCLI:
         python main.py search <question> [k]
         python main.py ask <question> [--verbose]
         python main.py evaluate [num_files]
+        python main.py test_retrieval [num_samples]
         python main.py web [--watch]
     """
 
@@ -375,6 +376,18 @@ class LastroCLI:
         """
 
         evaluate_extraction_quality(num_files)
+    
+    def test_retrieval(self, num_samples: int = 5) -> None:
+        """Avalia a performance de recuperação (Retrieval) do banco vetorial.
+
+        Calcula a métrica de 'Hit Rate' gerando perguntas sintéticas para chunks
+        aleatórios e verificando se o sistema consegue recuperar o chunk original.
+
+        Args:
+            num_samples (int): Número de amostras para o teste. Padrão é 5.
+        """
+
+        evaluate_retrieval_performance(num_samples)
 
     def web(self, watch: bool = False) -> None:
         """Inicia a interface web do Lastro.AI.
