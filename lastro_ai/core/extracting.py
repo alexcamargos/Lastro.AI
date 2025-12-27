@@ -23,6 +23,59 @@ from langchain_core.documents import Document
 from loguru import logger
 
 
+def _is_valid_line(line: str) -> bool:
+    """Verifica se a linha contém informação relevante.
+
+    Args:
+        line (str): Linha de texto a ser avaliada.
+    Returns:
+        bool: True se a linha for relevante, False caso contrário.
+    """
+
+    # Filtros simples de cabeçalho/rodapé comuns.
+    _DISCARD_PATTERNS = [
+        'Banco Central do Brasil',
+        'Relatório de Inflação',
+        'Relatório de Política Monetária'
+    ]
+
+    stripped = line.strip()
+
+    # Remove números de página isolados que estejam isolados.
+    if len(stripped) < 5 and stripped.isdigit():
+        return False
+
+    # Remove padrões de ruído conhecidos.
+    if any(pattern in stripped for pattern in _DISCARD_PATTERNS):
+        return False
+
+    return True
+
+
+def _clean_text(text: str) -> str:
+    """Realiza limpeza básica do texto extraído.
+
+    Remove cabeçalhos e rodapés comuns, bem como linhas muito curtas
+    que não agregam valor ao conteúdo principal.
+
+    Args:
+        text (str): Texto a ser limpo.
+
+    Returns:
+        str: Texto limpo.
+    """
+
+    # Remove linhas vazias.
+    if not text:
+        return ''
+
+    cleaned_lines = [
+        line for line in text.split('\n') if _is_valid_line(line)
+    ]
+
+    return '\n'.join(cleaned_lines)
+
+
 def extract_report_text(pdf_path: Path) -> list[Document]:
     """Extrai o conteúdo textual e tabular de um arquivo PDF.
 
@@ -50,7 +103,9 @@ def extract_report_text(pdf_path: Path) -> list[Document]:
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             # Extrai texto completo da página.
-            text = page.extract_text() or ''
+            raw_text = page.extract_text() or ''
+            # Limpa o texto extraído.
+            text = _clean_text(raw_text)
 
             # Extrai as tabelas da página, se houver, e as formata em Markdown.
             tables = page.extract_tables()
