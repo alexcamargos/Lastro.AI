@@ -56,7 +56,7 @@ def retrieve_context(query: str, k: int = 5) -> str:
         # Extrai metadados para citar fontes (se disponível)
         source = doc.metadata.get('source', 'Desconhecido')
         page = doc.metadata.get('page', '?')
-        content = doc.page_content.replace('\n', ' ')
+        content = doc.page_content
 
         formatted_results.append(
             f'--- Trecho {index} ---\nFonte: {source} (Pág. {page})\nConteúdo: {content}'
