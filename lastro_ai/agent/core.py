@@ -15,7 +15,6 @@
 #  License: MIT
 # ------------------------------------------------------------------------------
 
-import tomllib
 from typing import Optional
 
 from langchain_core.output_parsers import StrOutputParser
@@ -27,35 +26,27 @@ from loguru import logger
 from lastro_ai import config as Cfg
 from lastro_ai.agent.services import get_chat_model
 from lastro_ai.agent.tools.retrieval import retrieve_context
+from lastro_ai.core.prompts import PromptManager
 
 
+# pylint: disable=too-few-public-methods
 class LastroAgent:
     """
     Agente principal do Lastro.AI.
 
     Responsável por orquestrar o fluxo de:
-    1. Carregamento de prompts (TOML).
+    1. Carregamento de prompts (TOML) via PromptManager.
     2. Recuperação de contexto via Vector Store (RAG).
     3. Geração de resposta via LLM.
     """
 
     def __init__(self, provider: Optional[str] = None) -> None:
-        self.prompts = self._load_prompts()
-
         # Inicializa o modelo de linguagem.
         # O provedor é definido na configuração global, mas pode ser sobrescrito.
         if provider is None:
             provider = Cfg.LLM_PROVIDER
 
         self.chat_model = get_chat_model(provider=provider)
-
-    def _load_prompts(self) -> dict:
-        """Carrega as configurações de prompt do arquivo TOML."""
-
-        prompts_path = Cfg.PROMPTS_DIR / "slm.toml"
-
-        with open(prompts_path, 'rb') as file:
-            return tomllib.load(file)
 
     def _inspect_prompt(self, prompt_value: PromptValue, verbose: bool) -> PromptValue:
         """Helper para exibir o prompt no terminal se o modo verbose estiver ativo.
@@ -89,9 +80,16 @@ class LastroAgent:
             str: A resposta gerada pela IA.
         """
 
-        # Preparar o prompt
-        system_msg = self.prompts['agent']['system_message']
-        rag_template = self.prompts['rag']['qa_template']
+        # Carrega prompts específicos do perfil configurado.
+        promtp_profile = Cfg.PROMPT_PROFILE
+        system_msg = PromptManager.get(f'agent.{promtp_profile}.system_message')
+        rag_template = PromptManager.get(f'agent.{promtp_profile}.qa_template')
+
+        # Fallback para 'slm' se o perfil configurado não retornar nada.
+        if not system_msg:
+            logger.warning(f"Profile '{promtp_profile}' not found. Falling back to 'slm'.")
+            system_msg = PromptManager.get('agent.slm.system_message')
+            rag_template = PromptManager.get('agent.slm.qa_template')
 
         prompt = ChatPromptTemplate.from_messages(
             [
