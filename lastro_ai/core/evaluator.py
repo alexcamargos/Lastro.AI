@@ -23,8 +23,9 @@ from langchain_groq import ChatGroq
 from loguru import logger
 
 from lastro_ai import config as Cfg
-from lastro_ai.agent.tools.retrieval import retrieve_context, _get_vector_store
+from lastro_ai.agent.tools.retrieval import _get_vector_store, retrieve_context
 from lastro_ai.core.extracting import extract_report_text
+from lastro_ai.core.prompts import PromptManager
 
 
 def _get_random_samples(raw_dir: Path, num_files: int = 3) -> list[Path]:
@@ -69,28 +70,8 @@ def evaluate_extraction_quality(num_files: int = 3) -> None:
         logger.error(f'Erro de configuração ao inicializar LLM Groq: {error}')
         return
 
-    evaluation_prompt = ChatPromptTemplate.from_template("""
-        Você é um avaliador especialista em processamento de documentos (OCR/PDF Parsing).
-        Analise o texto extraído abaixo de uma página de um documento oficial e dê uma nota de 0 a 10.
-
-        Critérios de Avaliação:
-        1. **Coerência Textual**: O texto faz sentido ou há quebras de linha/palavras unidas incorretamente?
-        2. **Formatação de Tabelas**: Se houver tabelas, elas estão em Markdown estruturado ou "achatadas"?
-        3. **Limpeza**: O texto contém cabeçalhos/rodapés repetitivos ("Banco Central do Brasil", "Pág 10")? (Menos é melhor)
-
-        <texto_extraido>
-        {text}
-        </texto_extraido>
-
-        Responda APENAS no seguinte formato JSON:
-        {{
-            "score": <nota_0_10>,
-            "reasoning": "<breve explicação dos pontos positivos e negativos>",
-            "has_table": <true/false>,
-            "has_noise": <true/false>
-        }}
-    """
-    )
+    judge_template = PromptManager.get('evaluation.extraction.judge_template')
+    evaluation_prompt = ChatPromptTemplate.from_template(judge_template)
 
     chain = evaluation_prompt | llm
 
@@ -162,18 +143,8 @@ def evaluate_retrieval_performance(num_samples: int = 5) -> None:
         logger.error(f'Erro ao inicializar LLM: {error}')
         return
 
-    qa_gen_prompt = ChatPromptTemplate.from_template(
-        """
-        Você é um gerador de dados para testes de RAG.
-        Dado o texto abaixo, gere UMA pergunta específica que só possa ser respondida corretamente com este texto.
-        A pergunta deve ser clara e não deve mencionar "de acordo com o texto".
-
-        <texto>
-        {text}
-        </texto>
-
-        Pergunta:
-    """)
+    qa_gen_template = PromptManager.get('evaluation.retrieval.synthetic_qa_template')
+    qa_gen_prompt = ChatPromptTemplate.from_template(qa_gen_template)
 
     qa_chain = qa_gen_prompt | llm
 
